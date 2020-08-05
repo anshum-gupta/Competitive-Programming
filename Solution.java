@@ -174,133 +174,29 @@ static ArrayList<ArrayList<Integer>> adj;
 static int n, m, k, x, y, z, q;
 static char[]arr;
 static int[][]par;
-static void dfs(int u, int p) {
-	vis[u] = true;
-	if(p != -1) {
-		par[0][u] = p;
+public static PrintWriter out;
+public static MyScanner s;
+	public static void solve() throws Exception {
+	   // solve the problem here
+			s = new MyScanner();
+	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
+	        int tc = 1;//s.nextInt();
+	        while(tc-->0){
+	        	LCA get_lca = new LCA(5);
+	        	get_lca.read(4);
+	        	get_lca.print_graph();
+	        	get_lca.preprocess(1, -1);   	
+	        	q = s.nextInt();
+	        	out.println("q = " + q);
+	        	for(int i=0; i<q; i++) {
+	        		int x = s.nextInt();
+	        		int y = s.nextInt();
+	        		out.println("X & Y = " + x + " " + y);
+	        		out.println(get_lca.lca(x, y));
+	        	}
+	        }   
+	           
+	        out.flush();
 	}
-	for(int i=1; i<18; i++) {
-		if(par[i-1][u] == -1)break;
-		par[i][u] = par[i-1][par[i-1][u]];
-	}
-	for(Integer x : adj.get(u)) {
-		if(!vis[x]) {
-			dep[x] = dep[u] + 1;
-			dfs(x, u);
-		}
-	}
-}
-static int lca(int u, int v) {
-	if(dep[u] < dep[v]) {
-		return lca(v, u);
-	}
-	for(int i=log-1; i>=0; i--) {
-		if(par[i][u] == -1)continue;
-		if(dep[u] - (1<<i) >= dep[v]) {
-			u = par[i][u];
-		}
-	}
-	if(u == v)return u;
-	for(int i=log-1; i>=0; i--) {
-		if(par[i][u] == -1)continue;
-		if(par[i][u] != par[i][v]) {
-			u = par[i][u];
-			v = par[i][v];
-		}
-	}
-	return par[0][u];
-}
-static int dis(int u, int v) {
-	int lca = lca(u, v);
-//	out.println("lca of " + u + " and " + v + " is " + lca);
-	return dep[u] + dep[v] - dep[lca] * 2;
-}
-public static void solve() throws Exception {
-   // solve the problem here
-   MyScanner s = new MyScanner();
-        out = new PrintWriter(new BufferedOutputStream(System.out), true);
-        int tc = 1;//s.nextInt();
-        while(tc-->0){
-        	n = s.nextInt();
-        	adj = new ArrayList<ArrayList<Integer>>();
-        	for(int i=0; i<n; i++)adj.add(new ArrayList<Integer>());
-        	for(int i=0; i<n-1; i++) {
-        		int u = s.nextInt()-1;
-        		int v = s.nextInt()-1;
-        		adj.get(u).add(v);
-        		adj.get(v).add(u);
-        	}
-        	q = s.nextInt();
-        	par = new int[18][n];
-        	dep = new int[n];
-        	vis = new boolean[n];
-        	for(int i=0; i<18; i++)Arrays.fill(par[i], -1);
-        	dfs(0, -1);
-        	for(int i=0; i<q; i++) {
-        		int x = s.nextInt()-1;
-        		int y = s.nextInt()-1;
-        		int a = s.nextInt()-1;
-        		int b = s.nextInt()-1;
-        		int k = s.nextInt();
-        		boolean ok = false;
-        		int ab = dis(a, b);
-        		int xy = dis(x, y);
-        		int ax = dis(a, x);
-        		int bx = dis(b, x);
-        		int ay = dis(a, y);
-        		int by = dis(b, y);
-        		if(ab <= k && (k-ab) % 2 == 0)ok = true;
-        		if(ax + 1 + by <= k && (k - (ax+by+1)) % 2 == 0)ok = true;
-        		if(ay + 1 + bx <= k && (k - (ay+bx+1)) % 2 == 0)ok = true;
-        		if(ax+1+by+xy+1 <= k && (k-(ax+1+by+xy+1)) % 2 == 0)ok = true;
-        		if(ay+1+bx+xy+1 <= k && (k-(ay+1+bx+xy+1)) % 2 == 0)ok = true;
-        		out.println(ok ? "YES" : "NO");
-        	}
-        }   
-           
-        out.flush();
-}
  
-         
- 
- 
- 
-    //-----------PrintWriter for faster output---------------------------------
-    public static PrintWriter out;
- 
-    //-----------MyScanner class for faster input----------
-    public static class MyScanner {
-        BufferedReader br;
-        StringTokenizer st;
- 
-        public MyScanner() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
- 
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
- 
-        int nextInt() { return Integer.parseInt(next()); }
-        long nextLong() { return Long.parseLong(next()); }
-        double nextDouble() { return Double.parseDouble(next()); }
-         
-        String nextLine(){
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
-    }
-    //--------------------------------------------------------
 }
