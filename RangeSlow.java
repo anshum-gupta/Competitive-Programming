@@ -14,7 +14,9 @@ public class RangeSlow implements QueryInterface {
 			arr[index] += val;
 		}
 	}
-
+	public void pointUpdate(int index, int value) {
+		arr[index] = value;
+	}
 	@Override
 	public int sum(int i, int j) {
 		int result = 0;

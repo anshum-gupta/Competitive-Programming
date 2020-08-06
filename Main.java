@@ -26,6 +26,11 @@ public static void solve() throws Exception {
         int a = rs.sum(3, 8);
         int b = st.sum(3, 8);
         out.println(a + " " + b);
+        st.pointUpdate(5, 100);
+        rs.pointUpdate(5, 100);
+        a = rs.sum(3, 8);
+        b = rs.sum(3, 8);
+        out.println(a + " " + b);
 }
  
          
