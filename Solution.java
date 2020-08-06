@@ -4,142 +4,11 @@ import java.math.*;
 import java.util.regex.*;
 
 public class Solution {
-	static class Graph {
-		ArrayList<ArrayList<Integer>> adj;
-		boolean[]vis;
-		final MyScanner s = new MyScanner();
-		public Graph() {}
-		int n;
-		public Graph(int n) {
-			this.n = n;
-			System.out.println("Graph constructor called!");
-			vis = new boolean[n+1];
-			adj = new ArrayList<ArrayList<Integer>>();
-			for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
-		}
-		public void read(int m) {
-			for(int i=0; i<m; i++) {
-				int u = s.nextInt();
-				int v = s.nextInt();
-				adj.get(u).add(v);
-				adj.get(v).add(u);
-			}
-		}
-		public void print_graph() {
-			for(int i=1; i<=n; i++) {
-				System.out.print("Edge from " + i + " to --->  ");
-				for(Integer x : adj.get(i)) {
-					System.out.print(x + " ");
-				}System.out.println();
-			}
-		}
-		public void dfs(int u) {
-			vis[u] = true;
-			for(Integer v : adj.get(u)) {
-				if(!vis[v]) {
-					dfs(v);
-				}
-			}
-		}
-	}
-	static class LCA extends Graph{
-		int[]dep;
-		int[][]par;
-		final int log = 18;
-		public PrintWriter out;
-		public LCA(int n) {
-			super(n);
-//			System.out.println("LCA constructor called!");
-			dep = new int[n+1];
-			par = new int[log][n+1];
-			vis = new boolean[n+1];
-			for(int i=0; i<log; i++)Arrays.fill(par[i], -1);
-		}
-		public LCA() {
-			super();
-		}
-		public void preprocess(int u, int p){
-			vis[u] = true;
-			if(p != -1) {
-				par[0][u] = p;
-			}
-			for(int i=1; i<18; i++) {
-				if(par[i-1][u] == -1)break;
-				par[i][u] = par[i-1][par[i-1][u]];
-			}
-			for(Integer x : adj.get(u)) {
-				if(!vis[x]) {
-					dep[x] = dep[u] + 1;
-					preprocess(x, u);
-				}
-			}
-		}
-		public int lca(int u, int v) {
-//			System.out.println("lca called!");
-			if(dep[u] < dep[v]) {
-				return lca(v, u);
-			}
-			for(int i=log-1; i>=0; i--) {
-				if(par[i][u] == -1)continue;
-				if(dep[u] - (1<<i) >= dep[v]) {
-					u = par[i][u];
-				}
-			}
-			if(u == v) {
-//				System.out.println("lca of " + u + " and " + v + " is " + u);
-				return u;
-			}
-			for(int i=log-1; i>=0; i--) {
-				if(par[i][u] == -1)continue;
-				if(par[i][u] != par[i][v]) {
-					u = par[i][u];
-					v = par[i][v];
-				}
-			}
-//			System.out.println("lca of " + u + " and " + v + " is " + par[0][u]);
-			return par[0][u];
-		}
-		public int dis(int u, int v) {
-			int lca = lca(u, v);
-			return dep[u] + dep[v] - dep[lca] * 2;
-		}
-	}
-
-static class edge implements Comparable<edge>{
-        int to, from, weight;
-        public edge(int x, int y, int z) {
-            to = Math.min(x, y);
-            from = Math.max(x,  y);
-            weight = z;
-        }
-        public int compareTo(edge e) {
-            return weight - e.weight;
-        }
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + to;
-            result = prime * result + from;
-            return result;
-        }
-        @Override
-        public boolean equals(Object obj) {
-            edge cur = (edge)obj;
-            if(to == cur.to && from == cur.from)return true;
-            if(to == cur.from && from == cur.to)return true;
-            return false;
-        }
-    }
-static class Pair<E> implements Comparable<Pair<E>>{
-
+static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
-       E b;
-//       int ind;
-//       public Pair(int x, long y) {a = x;b=y;}
-       public Pair(E x, E y) {a = x;b=y;}
-//       public Pair(int x,int y, int z){a=x;b=y;ind = z;}
-       public int compareTo(Pair<E> p){
+       V b;
+       public Pair(E x, V y) {a = x;b=y;}
+       public int compareTo(Pair<E, V> p){
            return Integer.compare((Integer)a, (Integer)p.a);
        }
         @Override
@@ -153,7 +22,7 @@ static class Pair<E> implements Comparable<Pair<E>>{
         }
         @Override
         public boolean equals(Object obj) {
-            Pair<Integer> cur = (Pair<Integer>)obj;
+            Pair<E, V> cur = (Pair<E, V>)obj;
             if((Integer)a == (Integer)cur.a && (Integer)b == (Integer)cur.b)return true;
             if((Integer)b == (Integer)cur.a && (Integer)a == (Integer)cur.b)return true;
             return false;
@@ -268,36 +137,122 @@ static final int mxN = (int)(1e5);
 static final int mxV = (int)(1e5+5), log = 18;
 static long mod = (long)(1e9+7); //998244353;//
 static int[]tree, lazy, dep;
-static long[]fact, inv_fact, a;
-static final int INF = (int)2e9+5;
+static long[]fact, inv_fact;
+static final int INF = (int)1e9+5;
 static boolean[]vis;
-static ArrayList<ArrayList<Integer>> adj;
+static ArrayList<ArrayList<Pair<Integer, Integer>>> adj;
 static int n, m, k, x, y, z, q;
-static char[]arr;
-static int[][]par;
-public static PrintWriter out;
-public static MyScanner s;
+static char[]arr, str;
+static int[]cur, cnt;
+static boolean done() {
+	for(int i=0; i<4; i++) {
+		if(cur[i] < cnt[i] - n/4)
+			return false;
+	}
+	return true;
+}
+static void remove(int i) {
+	for(int j=0; j<4; j++) {
+		if(arr[j] == str[i]) {
+			cur[j]--;
+		}
+	}
+}
+static void add(int i) {
+	for(int j=0; j<4; j++) {
+		if(arr[j] == str[i]) {
+			cur[j]++;
+		}
+	}
+}
 	public static void solve() throws Exception {
 	   // solve the problem here
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 	        int tc = 1;//s.nextInt();
 	        while(tc-->0){
-	        	LCA get_lca = new LCA(5);
-	        	get_lca.read(4);
-	        	get_lca.print_graph();
-	        	get_lca.preprocess(1, -1);   	
-	        	q = s.nextInt();
-	        	out.println("q = " + q);
-	        	for(int i=0; i<q; i++) {
-	        		int x = s.nextInt();
-	        		int y = s.nextInt();
-	        		out.println("X & Y = " + x + " " + y);
-	        		out.println(get_lca.lca(x, y));
+	        	n = s.nextInt();
+	        	arr = new char[]{'A', 'C', 'G', 'T'};
+	        	str = s.next().toCharArray();
+	        	cnt = new int[n];
+	        	for(int i=0; i<n; i++) {
+	        		for(int j=0; j<4; j++) {
+	        			if(arr[j] == str[i]) {
+	        				cnt[j]++;
+	        			}
+	        		}
 	        	}
+	        	cur = new int[4];
+	        	if(done()) {
+	        		out.println("0");
+	        		return;
+	        	}
+	        	int j = 0;
+	        	int ans = n;
+	        	for(int i=0; i<n; i++) {
+	        		add(i);
+	        		while(done()) {
+	        			ans = Math.min(ans, i-j+1);
+	        			remove(j++);
+	        			if(j == n)break;
+	        		}
+	        	}
+	        	out.println(ans);
 	        }   
 	           
 	        out.flush();
+	        out.close();
 	}
+
+public static PrintWriter out;
+public static MyScanner s;
+static class MyScanner {
+
+    BufferedReader br;
+    StringTokenizer st;
+
+    public MyScanner() {
+        br = new BufferedReader(new InputStreamReader(System.in));
+    }
+
+    String next() {
+        while (st == null || !st.hasMoreElements()) {
+            try {
+                st = new StringTokenizer(br.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return st.nextToken();
+    }
+
+    int nextInt() { return Integer.parseInt(next()); }
+    long nextLong() { return Long.parseLong(next()); }
+    double nextDouble() { return Double.parseDouble(next()); }
+    int[] nextIntArray(int n){
+    	int[]a = new int[n];
+    	for(int i=0; i<n; i++) {
+    		a[i] = this.nextInt();
+    	}
+    	return a;
+    }
+    long[] nextLongArray(int n) {
+    	long[]a = new long[n];
+    	for(int i=0; i<n; i++) {
+    		a[i] = this.nextLong();
+    	}
+    	return a;
+    }
+    String nextLine(){
+        String str = "";
+        try {
+            str = br.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+}
+
  
 }
