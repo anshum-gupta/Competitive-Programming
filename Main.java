@@ -31,6 +31,11 @@ public static void solve() throws Exception {
         a = rs.sum(3, 8);
         b = rs.sum(3, 8);
         out.println(a + " " + b);
+        st.rangeUpdate(1, 4, 10);
+        rs.rangeUpdate(1, 4, 10);
+        a = rs.sum(1, 9);
+        b = st.sum(1, 9);
+        out.println(a + " " + b);
 }
  
          

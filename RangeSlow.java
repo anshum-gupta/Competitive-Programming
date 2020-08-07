@@ -9,7 +9,7 @@ public class RangeSlow implements QueryInterface {
 	}
 	
 	@Override
-	public void increment(int i, int j, int val) {
+	public void rangeUpdate(int i, int j, int val) {
 		for(int index = i; index <= j; index++) {
 			arr[index] += val;
 		}
