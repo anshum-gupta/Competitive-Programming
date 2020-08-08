@@ -1,35 +1,11 @@
+package Contest;
 import java.io.*;
 import java.util.*;
 import java.math.*;
 import java.util.regex.*;
 
-public class Solution {
-static class item implements Comparable<item>{
-	int val;
-	int cnt;
-	public item(int x, int y) {
-		val = x;
-		cnt = y;
-	}
+public class A {
 
-	@Override
-	public boolean equals(Object obj) {
-		item other = (item) obj;
-		if (val != other.val)
-			return false;
-		return true;
-	}
-
-	public int compareTo(item i) {
-		if(val != i.val)
-		{
-			if(cnt != i.cnt)
-				return i.cnt - cnt;
-			else return 1;
-		}
-		return 0;
-	}
-}
 static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
        V b;
@@ -168,30 +144,15 @@ static final int INF = (int)1e9+5;
 static boolean[]vis;
 static ArrayList<ArrayList<Integer>> adj;
 static int n, m, k, x, y, z, q;
-static char[]arr, str;
-
+static char[]arr, str, a, b;
 	public static void solve() throws Exception {
 	   // solve the problem here
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-	        int tc = 1;//s.nextInt();
+	        int tc = s.nextInt();
 	        while(tc-->0){
-	        	n = s.nextInt();
-	        	k = s.nextInt();
-	        	int[]x = s.nextIntArray(n);
-	        	int prev = 0, cnt = 0, cur = 0;
-	        	Arrays.parallelSort(x);
-	        	for(int i=0; i<n; i++) {
-	        		if(prev + k >= x[i]) {
-	        		}
-	        		else {
-	        			prev = x[i];
-	        			cnt++;
-	        		}
-	        		out.println("i = " + i + " cnt = " + cnt);
-	        	}
-	        	out.println(cnt == 0 ? 1 : cnt);
+	        	
 	        } 
 	           
 	        out.flush();
