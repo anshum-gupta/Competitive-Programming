@@ -11,7 +11,7 @@ class Graph {
 	int n;
 	public Graph(int n) {
 		this.n = n;
-		System.out.println("Graph constructor called!");
+//		System.out.println("Graph constructor called!");
 		vis = new boolean[n+1];
 		adj = new ArrayList<ArrayList<Integer>>();
 		for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
@@ -40,4 +40,54 @@ class Graph {
 			}
 		}
 	}
+	public void bfs(int u) {
+		Queue<Integer> q = new ArrayDeque<Integer>();
+		vis[u] = true;
+		q.add(u);
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			for(Integer x : adj.get(cur)) {
+				if(!vis[x]) {
+					vis[x] = true;
+					q.add(x);
+				}
+			}
+		}
+	}
+	void dfsForTopologicalSort(int u, ArrayList<Integer> topologicalSort) {
+		vis[u] = true;
+		for(Integer x : adj.get(u)) {
+			if(!vis[x]) {
+				dfsForTopologicalSort(x, topologicalSort);
+			}
+		}
+		topologicalSort.add(u);
+	}
+	public ArrayList<Integer>topologicalSort(int u) {
+			ArrayList<Integer> topologicalSort = new ArrayList<Integer>();
+			dfsForTopologicalSort(1, topologicalSort);
+			return topologicalSort;
+	}
+	public void bfsWithDistanceStore(int u, int[]distance) {
+		Queue<Integer> q = new ArrayDeque<Integer>();
+		vis[u] = true;
+		q.add(u);
+		distance[u] = 0;
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			for(Integer x : adj.get(cur)) {
+				if(!vis[x]) {
+					vis[x] = true;
+					q.add(x);
+					distance[x] = distance[cur] + 1;
+				}
+			}
+		}
+	}
+	public int[] ShortestDistanceFromGivenVertex(int u) {
+		int[]res = new int[n];
+		this.bfsWithDistanceStore(u, res);
+		return res;
+	}
+	
 }

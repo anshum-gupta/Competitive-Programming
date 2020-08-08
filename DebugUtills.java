@@ -46,10 +46,10 @@ public class DebugUtills {
 			}out.println();
 		}
 	}
-	public static void printAdjacencyListForWeightedGraph(ArrayList<ArrayList<Solution.Pair>> adj) {
+	public static void printAdjacencyListForWeightedGraph(ArrayList<ArrayList<Pair>> adj) {
 		for(int i=0; i<adj.size(); i++) {
 			out.print("Edge from " + i + " to --> ");
-			for(Solution.Pair x : adj.get(i)) {
+			for(Pair x : adj.get(i)) {
 				out.print(x.a + " ");
 			}out.println();
 		}
