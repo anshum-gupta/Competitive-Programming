@@ -2,7 +2,8 @@
 public class SegmentTree implements QueryInterface {
 	
 	int left, right;
-	SegmentTree lChild, rChild;
+	// lChild => tree[2*tn] , rChild => tree[2*tn+1]
+	SegmentTree lChild, rChild; 
 	int sum;
 	int minimum;
 	int lazyForSum = 0;
@@ -11,7 +12,7 @@ public class SegmentTree implements QueryInterface {
 	public SegmentTree(int[]arr, int left, int right) {
 		this.left = left;
 		this.right = right;
-		if(left == right) {
+		if(left == right) { // LEAF NODE
 			this.sum = arr[left];
 			this.minimum = arr[left];
 		}
@@ -23,7 +24,7 @@ public class SegmentTree implements QueryInterface {
 		}
 	}
 	
-	public void recalculate() {
+	public void recalculate() { // BASICALLY DOING tree[tn] = tree[2*tn] + tree[2*tn]
 		if(left == right)return;
 		this.sum = lChild.sum + rChild.sum;
 		this.minimum = Math.min(lChild.minimum, rChild.minimum);

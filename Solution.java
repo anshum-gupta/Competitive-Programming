@@ -4,6 +4,32 @@ import java.math.*;
 import java.util.regex.*;
 
 public class Solution {
+static class item implements Comparable<item>{
+	int val;
+	int cnt;
+	public item(int x, int y) {
+		val = x;
+		cnt = y;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		item other = (item) obj;
+		if (val != other.val)
+			return false;
+		return true;
+	}
+
+	public int compareTo(item i) {
+		if(val != i.val)
+		{
+			if(cnt != i.cnt)
+				return i.cnt - cnt;
+			else return 1;
+		}
+		return 0;
+	}
+}
 static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
        V b;
@@ -140,65 +166,53 @@ static int[]tree, lazy, dep;
 static long[]fact, inv_fact;
 static final int INF = (int)1e9+5;
 static boolean[]vis;
-static ArrayList<ArrayList<Pair<Integer, Integer>>> adj;
+static ArrayList<ArrayList<Integer>> adj;
 static int n, m, k, x, y, z, q;
 static char[]arr, str;
-static int[]cur, cnt;
-static boolean done() {
-	for(int i=0; i<4; i++) {
-		if(cur[i] < cnt[i] - n/4)
-			return false;
-	}
-	return true;
-}
-static void remove(int i) {
-	for(int j=0; j<4; j++) {
-		if(arr[j] == str[i]) {
-			cur[j]--;
-		}
-	}
-}
-static void add(int i) {
-	for(int j=0; j<4; j++) {
-		if(arr[j] == str[i]) {
-			cur[j]++;
-		}
-	}
+static int[] dx = {-1, 1, 0, 0}, dy = {0, 0, -1, 1};
+static boolean inside(int i, int j) {
+	return (i >= 0 && j >= 0 && i < n && j < m);
 }
 	public static void solve() throws Exception {
 	   // solve the problem here
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
+//	   		out = new PrintWriter("output.txt");
 	        int tc = 1;//s.nextInt();
 	        while(tc-->0){
 	        	n = s.nextInt();
-	        	arr = new char[]{'A', 'C', 'G', 'T'};
-	        	str = s.next().toCharArray();
-	        	cnt = new int[n];
+	        	m = s.nextInt();
+	        	char[][]a = s.next2DCharArray(n, m);
+	
+	        	int[][]dp = new int[n][m];
+	        	for(int i=0; i<n; i++)Arrays.fill(dp[i], 1);
 	        	for(int i=0; i<n; i++) {
-	        		for(int j=0; j<4; j++) {
-	        			if(arr[j] == str[i]) {
-	        				cnt[j]++;
+	        		for(int j=0; j<m; j++) {
+	        			dp[i][j] = n;
+	        			for(int k=0; k<4; k++) {
+	        				int x = i + dx[k];
+	        				int y = j + dy[k];
+	        				if(!inside(x, y) || a[x][y] != a[i][j]) {
+	        					dp[i][j] = 1;
+	        					break;
+	        				}
+	        				dp[i][j] = Math.min(dp[i][j], dp[x][y] + 1);
 	        			}
 	        		}
 	        	}
-	        	cur = new int[4];
-	        	if(done()) {
-	        		out.println("0");
-	        		return;
-	        	}
-	        	int j = 0;
-	        	int ans = n;
 	        	for(int i=0; i<n; i++) {
-	        		add(i);
-	        		while(done()) {
-	        			ans = Math.min(ans, i-j+1);
-	        			remove(j++);
-	        			if(j == n)break;
+	        		for(int j=0; j<m; j++) {
+	        			out.print(dp[i][j] + " ");
+	        		}out.println();
+	        	}
+	        	long ans = 0;
+	        	for(int i=0; i<n; i++) {
+	        		for(int j=0; j<m; j++) {
+	        			ans += dp[i][j];
 	        		}
 	        	}
 	        	out.println(ans);
-	        }   
+	        } 
 	           
 	        out.flush();
 	        out.close();
@@ -242,6 +256,34 @@ static class MyScanner {
     		a[i] = this.nextLong();
     	}
     	return a;
+    }
+    char[][] next2DCharArray(int n, int m){
+    	char[][]arr = new char[n][m];
+    	for(int i=0; i<n; i++) {
+    		arr[i] = this.next().toCharArray();
+    	}
+    	return arr;
+    }
+    ArrayList<ArrayList<Integer>> readUndirectedUnweightedGraph(int n, int m) {
+    	ArrayList<ArrayList<Integer>>adj = new ArrayList<ArrayList<Integer>>();
+    	for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
+    	for(int i=0; i<m; i++) {
+    		int u = s.nextInt();
+    		int v = s.nextInt();
+    		adj.get(u).add(v);
+    		adj.get(v).add(u);
+    	}
+    	return adj;
+    }
+    ArrayList<ArrayList<Integer>> readDirectedUnweightedGraph(int n, int m) {
+    	ArrayList<ArrayList<Integer>>adj = new ArrayList<ArrayList<Integer>>();
+    	for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
+    	for(int i=0; i<m; i++) {
+    		int u = s.nextInt();
+    		int v = s.nextInt();
+    		adj.get(u).add(v);
+    	}
+    	return adj;
     }
     String nextLine(){
         String str = "";
