@@ -1,35 +1,7 @@
 import java.io.*;
 import java.util.*;
-import java.math.*;
-import java.util.regex.*;
 
 public class Solution {
-static class item implements Comparable<item>{
-	int val;
-	int cnt;
-	public item(int x, int y) {
-		val = x;
-		cnt = y;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		item other = (item) obj;
-		if (val != other.val)
-			return false;
-		return true;
-	}
-
-	public int compareTo(item i) {
-		if(val != i.val)
-		{
-			if(cnt != i.cnt)
-				return i.cnt - cnt;
-			else return 1;
-		}
-		return 0;
-	}
-}
 static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
        V b;
@@ -37,24 +9,32 @@ static class Pair<E, V> implements Comparable<Pair<E, V>>{
        public int compareTo(Pair<E, V> p){
            return Integer.compare((Integer)a, (Integer)p.a);
        }
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + (Integer)a;
-            result = prime * result + (Integer)b;
-           
-            return result;
-        }
-        @Override
-        public boolean equals(Object obj) {
-            Pair<E, V> cur = (Pair<E, V>)obj;
-            if((Integer)a == (Integer)cur.a && (Integer)b == (Integer)cur.b)return true;
-            if((Integer)b == (Integer)cur.a && (Integer)a == (Integer)cur.b)return true;
-            return false;
-        }
+//        @Override
+//        public int hashCode() {
+//            final int prime = 31;
+//            int result = 1;
+//            result = prime * result + (Integer)a;
+//            result = prime * result + (Integer)b;
+//           
+//            return result;
+//        }
+//        @Override
+//        public boolean equals(Object obj) {
+//            Pair<E, V> cur = (Pair<E, V>)obj;
+//            if((Integer)a == (Integer)cur.a && (Integer)b == (Integer)cur.b)return true;
+//            if((Integer)b == (Integer)cur.a && (Integer)a == (Integer)cur.b)return true;
+//            return false;
+//        }
  } 
-public static void main(String[] args) throws Exception {
+static class task{
+	int m, d, ind;
+	public task(int d, int m, int ind) {
+		this.m = m;
+		this.d = d;
+		this.ind = ind;
+	}
+}
+public static void main(String[] args){
    new Thread(null, null, "Anshum Gupta", 99999999) {
         public void run() {
             try {
@@ -121,56 +101,22 @@ static void make_facts() {
   fact[0]=inv_fact[0]=1L;
   for(int i=1;i<mxN;i++) {
        fact[i] = (i*fact[i-1])%mod;
-       inv_fact[i] = my_inv(fact[i]);
+//       inv_fact[i] = my_inv(fact[i]);
   }
 }
-static void lazy(int st, int e, int tn) {
-    if(lazy[tn] != INF) {
-        tree[tn] = Math.min(tree[tn], lazy[tn]);
-        if(st != e) {
-            lazy[2*tn] = Math.min(lazy[2*tn], lazy[tn]);
-            lazy[2*tn+1] = Math.min(lazy[2*tn+1], lazy[tn]);
-        }
-        lazy[tn] = INF;
-    }
-}
-static void update(int ind, int val, int st, int e, int tn) {
-    if(st == e) {
-        tree[tn] = val;
-        return;
-    }
-    int mid = (st + e) >> 1;    
-      if(ind <= mid)
-        update(ind, val, st, mid, 2*tn);
-      else
-        update(ind, val, mid+1, e, 2*tn+1);
-    tree[tn] = Math.min(tree[2*tn], tree[2*tn+1]);
-}
-static int query(int l, int r, int st, int e, int tn) {
-    if(st > r || e < l)return INF;
-    
-    if(st >= l && e <= r) {
-        return tree[tn];
-    }
-
-    int mid = (st + e) >> 1;
-    int x = query(l, r, st, mid, 2 * tn);
-    int y = query(l, r, mid+1, e, 2 * tn + 1);
-    return Math.min(x, y);
-}
 static final long mxx = (long)(1e18+5);
-static final int mxN = (int)(1e5);
+static final int mxN = (int)(4e5+5);
 static final int mxV = (int)(1e5+5), log = 18;
-static long mod = (long)(1e9+7); //998244353;//
-static int[]tree, lazy, dep;
+static long mod = (long)(1e9+7); //998244353;//̇
 static long[]fact, inv_fact;
-static final int INF = (int)1e9+5;
-static boolean[]vis;
+static final int INF = (int)1e9;
+static boolean[][]vis;
 static ArrayList<ArrayList<Integer>> adj;
-static int n, m, k, x, y, z, q;
-static char[]arr, str;
+static int n, m, k, q, x, y, d;
+static char[]str;
+static char[][]arr;
 
-	public static void solve() throws Exception {
+public static void solve() throws Exception {
 	   // solve the problem here
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
@@ -178,20 +124,11 @@ static char[]arr, str;
 	        int tc = 1;//s.nextInt();
 	        while(tc-->0){
 	        	n = s.nextInt();
-	        	k = s.nextInt();
-	        	int[]x = s.nextIntArray(n);
-	        	int prev = 0, cnt = 0, cur = 0;
-	        	Arrays.parallelSort(x);
+	        	task[]arr = new task[n];
 	        	for(int i=0; i<n; i++) {
-	        		if(prev + k >= x[i]) {
-	        		}
-	        		else {
-	        			prev = x[i];
-	        			cnt++;
-	        		}
-	        		out.println("i = " + i + " cnt = " + cnt);
+	        		int d = s.nextInt(), m = s.nextInt();
+	        		arr[i] = new task(d, m, i);
 	        	}
-	        	out.println(cnt == 0 ? 1 : cnt);
 	        } 
 	           
 	        out.flush();
@@ -236,8 +173,22 @@ static class MyScanner {
     	}
     	return a;
     }
-    long[] nextLongArray(int n) {
+    long[] nextlongArray(int n) {
     	long[]a = new long[n];
+    	for(int i=0; i<n; i++) {
+    		a[i] = this.nextLong();
+    	}
+    	return a;
+    }
+    Integer[] nextIntegerArray(int n){
+    	Integer[]a = new Integer[n];
+    	for(int i=0; i<n; i++) {
+    		a[i] = this.nextInt();
+    	}
+    	return a;
+    }
+    Long[] nextLongArray(int n) {
+    	Long[]a = new Long[n];
     	for(int i=0; i<n; i++) {
     		a[i] = this.nextLong();
     	}
