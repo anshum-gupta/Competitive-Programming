@@ -23,9 +23,13 @@ public static void solve() throws Exception {
 		MyScanner s = new MyScanner();
 //        out = new PrintWriter(new BufferedOutputStream(System.out), true);
    		out = new PrintWriter("output.txt");
-   		String name = scanner.next();
-        out.println("Writing To File After Reading from file : NAME = > " + name);
-        System.out.println("Writing To File After Reading from file : NAME = > " + name);
+   		int mx = (int)1e5;
+   		Random rand = new Random();
+   		for(int i=0; i<mx; i++) {
+   			
+   		}
+   		
+   		
         out.flush();
         out.close();
 }

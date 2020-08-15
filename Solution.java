@@ -2,6 +2,94 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
+static	class Graph {
+		ArrayList<ArrayList<Integer>> adj;
+		boolean[]vis;
+//		final MyScanner s = new MyScanner();
+		public Graph() {}
+		int n;
+		public Graph(int n) {
+			this.n = n;
+//			System.out.println("Graph constructor called!");
+			vis = new boolean[n+1];
+			adj = new ArrayList<ArrayList<Integer>>();
+			for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
+		}
+		public void read(int m) {
+			for(int i=0; i<m; i++) {
+				int u = s.nextInt();
+				int v = s.nextInt();
+				adj.get(u).add(v);
+				adj.get(v).add(u);
+			}
+		}
+		public void print_graph() {
+			for(int i=1; i<=n; i++) {
+				System.out.print("Edge from " + i + " to --->  ");
+				for(Integer x : adj.get(i)) {
+					System.out.print(x + " ");
+				}System.out.println();
+			}
+		}
+		public void dfs(int u) {
+			vis[u] = true;
+			for(Integer v : adj.get(u)) {
+				if(!vis[v]) {
+					dfs(v);
+				}
+			}
+		}
+		public void bfs(int u) {
+			Queue<Integer> q = new ArrayDeque<Integer>();
+			vis[u] = true;
+			q.add(u);
+			while(!q.isEmpty()) {
+				int cur = q.poll();
+				for(Integer x : adj.get(cur)) {
+					if(!vis[x]) {
+						vis[x] = true;
+						q.add(x);
+					}
+				}
+			}
+		}
+		void dfsForTopologicalSort(int u, ArrayList<Integer> topologicalSort) {
+			vis[u] = true;
+			for(Integer x : adj.get(u)) {
+				if(!vis[x]) {
+					dfsForTopologicalSort(x, topologicalSort);
+				}
+			}
+			topologicalSort.add(u);
+		}
+		public ArrayList<Integer>topologicalSort(int u) {
+				ArrayList<Integer> topologicalSort = new ArrayList<Integer>();
+				dfsForTopologicalSort(1, topologicalSort);
+				return topologicalSort;
+		}
+		public void bfsWithDistanceStore(int u, int[]distance) {
+			Queue<Integer> q = new ArrayDeque<Integer>();
+			vis[u] = true;
+			q.add(u);
+			distance[u] = 0;
+			while(!q.isEmpty()) {
+				int cur = q.poll();
+				for(Integer x : adj.get(cur)) {
+					if(!vis[x]) {
+						vis[x] = true;
+						q.add(x);
+						distance[x] = distance[cur] + 1;
+					}
+				}
+			}
+		}
+		public int[] ShortestDistanceFromGivenVertex(int u) {
+			int[]res = new int[n];
+			this.bfsWithDistanceStore(u, res);
+			return res;
+		}
+		
+	}
 static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
        V b;
@@ -26,14 +114,6 @@ static class Pair<E, V> implements Comparable<Pair<E, V>>{
 //            return false;
 //        }
  } 
-static class task{
-	int m, d, ind;
-	public task(int d, int m, int ind) {
-		this.m = m;
-		this.d = d;
-		this.ind = ind;
-	}
-}
 public static void main(String[] args){
    new Thread(null, null, "Anshum Gupta", 99999999) {
         public void run() {
@@ -113,22 +193,29 @@ static final int INF = (int)1e9;
 static boolean[][]vis;
 static ArrayList<ArrayList<Integer>> adj;
 static int n, m, k, q, x, y, d;
-static char[]str;
+static char[]s1, s2;
 static char[][]arr;
+static int[][]dif;
 
 public static void solve() throws Exception {
 	   // solve the problem here
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-	        int tc = 1;//s.nextInt();
+	        int tc = s.nextInt();
 	        while(tc-->0){
 	        	n = s.nextInt();
-	        	task[]arr = new task[n];
-	        	for(int i=0; i<n; i++) {
-	        		int d = s.nextInt(), m = s.nextInt();
-	        		arr[i] = new task(d, m, i);
-	        	}
+	        	m = s.nextInt();
+	        	Graph g = new Graph(n);
+	        	g.read(m);
+	        	int[]distance = new int[n+1];
+	        	Arrays.fill(distance, INF);
+	        	int st = s.nextInt();
+	        	g.bfsWithDistanceStore(st, distance);
+	        	for(int i=1; i<=n; i++) {
+	        		if(i == st)continue;
+	        		out.print(distance[i] == INF ? "-1 " : distance[i] * 6 + " ");
+	        	}out.println();
 	        } 
 	           
 	        out.flush();
