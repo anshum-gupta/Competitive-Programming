@@ -202,20 +202,15 @@ public static void solve() throws Exception {
 			s = new MyScanner();
 	   		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-	        int tc = s.nextInt();
+	        int tc = 1;//s.nextInt();
 	        while(tc-->0){
 	        	n = s.nextInt();
-	        	m = s.nextInt();
-	        	Graph g = new Graph(n);
-	        	g.read(m);
-	        	int[]distance = new int[n+1];
-	        	Arrays.fill(distance, INF);
-	        	int st = s.nextInt();
-	        	g.bfsWithDistanceStore(st, distance);
-	        	for(int i=1; i<=n; i++) {
-	        		if(i == st)continue;
-	        		out.print(distance[i] == INF ? "-1 " : distance[i] * 6 + " ");
-	        	}out.println();
+	        	int[]a = s.nextIntArray(n);
+//	        	DebugUtills.printIntArray(a);
+	        	BIT_RangeQueryPointUpdate bit = new BIT_RangeQueryPointUpdate(a, n);
+	        	bit.init_tree(a);
+	        	int ans = bit.sumInRange(2, 4);
+	        	out.println(ans);
 	        } 
 	           
 	        out.flush();
