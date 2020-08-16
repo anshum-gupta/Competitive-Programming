@@ -2,94 +2,6 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-static	class Graph {
-		ArrayList<ArrayList<Integer>> adj;
-		boolean[]vis;
-//		final MyScanner s = new MyScanner();
-		public Graph() {}
-		int n;
-		public Graph(int n) {
-			this.n = n;
-//			System.out.println("Graph constructor called!");
-			vis = new boolean[n+1];
-			adj = new ArrayList<ArrayList<Integer>>();
-			for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
-		}
-		public void read(int m) {
-			for(int i=0; i<m; i++) {
-				int u = s.nextInt();
-				int v = s.nextInt();
-				adj.get(u).add(v);
-				adj.get(v).add(u);
-			}
-		}
-		public void print_graph() {
-			for(int i=1; i<=n; i++) {
-				System.out.print("Edge from " + i + " to --->  ");
-				for(Integer x : adj.get(i)) {
-					System.out.print(x + " ");
-				}System.out.println();
-			}
-		}
-		public void dfs(int u) {
-			vis[u] = true;
-			for(Integer v : adj.get(u)) {
-				if(!vis[v]) {
-					dfs(v);
-				}
-			}
-		}
-		public void bfs(int u) {
-			Queue<Integer> q = new ArrayDeque<Integer>();
-			vis[u] = true;
-			q.add(u);
-			while(!q.isEmpty()) {
-				int cur = q.poll();
-				for(Integer x : adj.get(cur)) {
-					if(!vis[x]) {
-						vis[x] = true;
-						q.add(x);
-					}
-				}
-			}
-		}
-		void dfsForTopologicalSort(int u, ArrayList<Integer> topologicalSort) {
-			vis[u] = true;
-			for(Integer x : adj.get(u)) {
-				if(!vis[x]) {
-					dfsForTopologicalSort(x, topologicalSort);
-				}
-			}
-			topologicalSort.add(u);
-		}
-		public ArrayList<Integer>topologicalSort(int u) {
-				ArrayList<Integer> topologicalSort = new ArrayList<Integer>();
-				dfsForTopologicalSort(1, topologicalSort);
-				return topologicalSort;
-		}
-		public void bfsWithDistanceStore(int u, int[]distance) {
-			Queue<Integer> q = new ArrayDeque<Integer>();
-			vis[u] = true;
-			q.add(u);
-			distance[u] = 0;
-			while(!q.isEmpty()) {
-				int cur = q.poll();
-				for(Integer x : adj.get(cur)) {
-					if(!vis[x]) {
-						vis[x] = true;
-						q.add(x);
-						distance[x] = distance[cur] + 1;
-					}
-				}
-			}
-		}
-		public int[] ShortestDistanceFromGivenVertex(int u) {
-			int[]res = new int[n];
-			this.bfsWithDistanceStore(u, res);
-			return res;
-		}
-		
-	}
 static class Pair<E, V> implements Comparable<Pair<E, V>>{
        E a;
        V b;
@@ -206,11 +118,16 @@ public static void solve() throws Exception {
 	        while(tc-->0){
 	        	n = s.nextInt();
 	        	int[]a = s.nextIntArray(n);
-//	        	DebugUtills.printIntArray(a);
-	        	BIT_RangeQueryPointUpdate bit = new BIT_RangeQueryPointUpdate(a, n);
-	        	bit.init_tree(a);
-	        	int ans = bit.sumInRange(2, 4);
-	        	out.println(ans);
+	        	BIT_PointQueryRangeUpdate bit2 = new BIT_PointQueryRangeUpdate(a, n);
+	        	bit2.init_tree(a);
+	        	bit2.updateRange(2, 5, 20);
+	        	bit2.updateRange(0, 4, 10);
+	        	DebugUtills.printIntArray(bit2.bit);
+	        	for(int i=0; i<n; i++) {
+	        		out.println(bit2.getElement(i));
+	        	}
+//	        	int ans2 = bit2.getElement(5);// - bit2.getSum(4);
+//	        	out.println(ans2);
 	        } 
 	           
 	        out.flush();

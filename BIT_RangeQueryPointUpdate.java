@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 // this one is for point query and range update
 
 public class BIT_RangeQueryPointUpdate {
@@ -10,6 +12,7 @@ public class BIT_RangeQueryPointUpdate {
 	}
 	public void init_tree(int[]a) {
 //		System.out.println("init tree ");
+		Arrays.fill(this.bit, 0);
 		for(int i=0; i<n; i++) {
 			this.add(i, a[i]);
 		}
