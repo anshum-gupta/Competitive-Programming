@@ -2,30 +2,40 @@ import java.io.*;
 import java.util.*;
 
 public class Solution {
-static class Pair<E, V> implements Comparable<Pair<E, V>>{
-       E a;
-       V b;
-       public Pair(E x, V y) {a = x;b=y;}
-       public int compareTo(Pair<E, V> p){
-           return Integer.compare((Integer)a, (Integer)p.a);
-       }
-//        @Override
-//        public int hashCode() {
-//            final int prime = 31;
-//            int result = 1;
-//            result = prime * result + (Integer)a;
-//            result = prime * result + (Integer)b;
-//           
-//            return result;
-//        }
-//        @Override
-//        public boolean equals(Object obj) {
-//            Pair<E, V> cur = (Pair<E, V>)obj;
-//            if((Integer)a == (Integer)cur.a && (Integer)b == (Integer)cur.b)return true;
-//            if((Integer)b == (Integer)cur.a && (Integer)a == (Integer)cur.b)return true;
-//            return false;
-//        }
- } 
+static class BIT_RangeQueryPointUpdate {
+	int[]bit;
+	int n;
+	public BIT_RangeQueryPointUpdate(int[]a, int n) {
+		this.n = n;
+		this.bit = new int[n+10];
+	}
+	public void init_tree(int[]a) {
+		Arrays.fill(this.bit, 0);
+		for(int i=0; i<n; i++) {
+			if(a[i] % 2 == 0)
+				this.add(i, 1);
+		}
+	}
+	public int sumQuery(int ind) {
+		int sum = 0;
+		ind++;
+		for(; ind > 0; ind -= ind & (-ind)) {
+			sum += bit[ind];
+		}
+		return sum;
+	}
+	public void add(int ind, int val) {
+		ind++;
+		for(; ind <= n; ind += ind & (-ind)) {
+			bit[ind] += val;
+		}
+	}
+	public int sumInRange(int l, int r) {
+		return sumQuery(r) - sumQuery(l - 1);
+	}
+	
+}
+
 public static void main(String[] args){
    new Thread(null, null, "Anshum Gupta", 99999999) {
         public void run() {
@@ -37,18 +47,6 @@ public static void main(String[] args){
             }
         }
     }.start();
-}
-public static long gcd(long a,long b)
-{
-  if(a<b)
-    return gcd(b,a);
-  if(b==0)
-    return a;
-  return gcd(b,a%b);
-  
-}
-static long lcm(int a,int b) {
-  return  a*b / gcd(a,b);
 }
 static int[] z(char[]arr) {
     int l = 0, r = 0;
@@ -104,8 +102,7 @@ static long[]fact, inv_fact;
 static final int INF = (int)1e9;
 static boolean[][]vis;
 static ArrayList<ArrayList<Integer>> adj;
-static int n, m, k, q, x, y, d;
-static char[]s1, s2;
+static int n, m, k, q, x, y;
 static char[][]arr;
 static int[][]dif;
 
@@ -118,16 +115,31 @@ public static void solve() throws Exception {
 	        while(tc-->0){
 	        	n = s.nextInt();
 	        	int[]a = s.nextIntArray(n);
-	        	BIT_PointQueryRangeUpdate bit2 = new BIT_PointQueryRangeUpdate(a, n);
-	        	bit2.init_tree(a);
-	        	bit2.updateRange(2, 5, 20);
-	        	bit2.updateRange(0, 4, 10);
-	        	DebugUtills.printIntArray(bit2.bit);
-	        	for(int i=0; i<n; i++) {
-	        		out.println(bit2.getElement(i));
+	        	BIT_RangeQueryPointUpdate bit = new BIT_RangeQueryPointUpdate(a, n);
+	        	bit.init_tree(a);
+	        	int q = s.nextInt();
+	        	while(q-- > 0) {
+	        		int type = s.nextInt(), x = s.nextInt(), y = s.nextInt();
+	        		if(type == 0) {
+	        			x--;
+	        			int tmp = a[x];
+	        			a[x] = y;
+	        			if((tmp ^ y )== 0)continue;
+	        			else if(tmp % 2 == 0) {
+	        				bit.add(x, -1);
+	        			}else bit.add(x, 1);
+	        		}else if(type == 1) {
+	        			x--;
+	        			y--;
+	        			int ans = bit.sumInRange(x, y);
+	        			out.println(ans);
+	        		}else {
+	        			x--;
+	        			y--;
+	        			int ans = bit.sumInRange(x, y);
+	        			out.println(y - x + 1 - ans);
+	        		}
 	        	}
-//	        	int ans2 = bit2.getElement(5);// - bit2.getSum(4);
-//	        	out.println(ans2);
 	        } 
 	           
 	        out.flush();
