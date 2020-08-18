@@ -1,12 +1,12 @@
 
-public class SegmentTree implements QueryInterface {
+public class SegmentTree{
 	
 	int left, right;
 	// lChild => tree[2*tn] , rChild => tree[2*tn+1]
 	SegmentTree lChild, rChild; 
-	int sum;
+	long sum;
 	int minimum;
-	int lazyForSum = 0;
+	long lazyForSum = 0;
 	int lazyForMin = 0;
 	final int INF = (int)1e9;
 	public SegmentTree(int[]arr, int left, int right) {
@@ -46,7 +46,7 @@ public class SegmentTree implements QueryInterface {
 	
 	public void updateLazy() {
 		if(this.lazyForSum != 0) {
-			this.sum += (this.right - this.left + 1) * lazyForSum;
+			this.sum += 1L * (this.right - this.left + 1) * lazyForSum;
 			if(left != right) {
 				lChild.lazyForSum += this.lazyForSum;
 				rChild.lazyForSum += this.lazyForSum;
@@ -62,15 +62,13 @@ public class SegmentTree implements QueryInterface {
 			this.lazyForMin = INF;
 		}
 	}
-	
-	@Override
 	public void rangeUpdate(int ql, int qr, int val) { // range update INCREMENT BY VALUE
 		updateLazy();
 		if(qr < this.left || ql > this.right) { // NO OVERLAP
 			return;
 		}
 		if(ql <= this.left && qr >= this.right) { // COMPLETE OVERLAP
-			this.sum += val * (this.right - this.left + 1);
+			this.sum += 1L * val * (this.right - this.left + 1);
 			this.minimum += val;
 			if(this.left != this.right) {
 				lChild.lazyForSum += val;
@@ -87,8 +85,8 @@ public class SegmentTree implements QueryInterface {
 		recalculate();
 	}
 
-	@Override
-	public int sum(int ql, int qr) {
+	public long sum(int ql, int qr) {
+		updateLazy();
 		if(ql <= this.left && qr >= this.right) { // COMPLETE OVERLAP
 			return this.sum;
 		}

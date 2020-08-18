@@ -23,8 +23,8 @@ public static void solve() throws Exception {
         int[]arr = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         SegmentTree st = new SegmentTree(arr, 0, arr.length-1);
         RangeSlow rs = new RangeSlow(arr);
-        int a = rs.sum(3, 8);
-        int b = st.sum(3, 8);
+        long a = rs.sum(3, 8);
+        long b = st.sum(3, 8);
         out.println(a + " " + b);
         st.pointUpdate(5, 100);
         rs.pointUpdate(5, 100);
