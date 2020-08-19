@@ -109,8 +109,10 @@ static class NumberTheoryUtils {
 		// Complexity O(sqrt(n))
 		long result = n;
 		for(int i=2; 1L*i*i <= n; i++) {
-			while(n % i == 0) {
-				n /= i;
+			if(n % i == 0) {
+				while(n % i == 0) {
+					n /= i;
+				}
 				result -= result / i;
 			}
 		}
@@ -165,10 +167,12 @@ public static void solve() throws Exception {
 //	   		out = new PrintWriter("output.txt");
         int tc = s.nextInt();
         NumberTheoryUtils ntu = new NumberTheoryUtils();
-        int[]phi = ntu.eulerTotientFunctionForRange(mxN);
         while(tc-->0){
-        	int n = s.nextInt();
-        	out.println(phi[n]);
+        	long a = s.nextLong(), m = s.nextLong();
+        	long g = ntu.gcd(a, m);
+        	long m1 = m / g;
+        	long answer = ntu.eulerTotientFunctionForSingleValue(m1);
+        	out.println(answer);
         } 
            
         out.flush();

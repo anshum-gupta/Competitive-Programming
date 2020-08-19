@@ -106,8 +106,10 @@ public class NumberTheoryUtils {
 		// Complexity O(sqrt(n))
 		long result = n;
 		for(int i=2; 1L*i*i <= n; i++) {
-			while(n % i == 0) {
-				n /= i;
+			if(n % i == 0) {
+				while(n % i == 0) {
+					n /= i;
+				}
 				result -= result / i;
 			}
 		}
