@@ -1,5 +1,4 @@
-import java.util.Arrays;
-
+import java.util.*;
 public class NumberTheoryUtils {
 	private long MOD = (long)(1e9 + 7);
 	long[]fact, inverseFact;
@@ -82,6 +81,54 @@ public class NumberTheoryUtils {
 			inverseFact[i] = this.inverseModulo(fact[i]);
 		}
 		return inverseFact;
+	}
+	public TreeMap<Integer, Integer> getPrimeFactors(long n){
+		TreeMap<Integer, Integer> answer = new TreeMap<Integer, Integer>();
+		int twoCount = 0;
+		while(n % 2 == 0) {
+			n /= 2;
+			twoCount++;
+		}
+		if(twoCount > 0)answer.put(2, twoCount);
+		for(int i=3; 1L*i*i<=n; i+=2) {
+			int iCount = 0;
+			while(n % i == 0) {
+				n /= i;
+				iCount++;
+			}
+			if(iCount > 0) {
+				answer.put(i, iCount);
+			}
+		}
+		return answer;
+	}
+	public long eulerTotientFunctionForSingleValue(long n) {
+		// Complexity O(sqrt(n))
+		long result = n;
+		for(int i=2; 1L*i*i <= n; i++) {
+			while(n % i == 0) {
+				n /= i;
+				result -= result / i;
+			}
+		}
+		if(n > 1) {
+			result -= result / n;
+		}
+		return result;
+	}
+	public int[]eulerTotientFunctionForRange(int n){
+		int[]phi = new int[n+1];
+		for(int i=1; i<=n; i++) {
+			phi[i] = i;
+		}
+		for(int i=2; i<=n; i++) {
+			if(phi[i] == i) {
+				for(int j=i; j<=n; j+=i) {
+					phi[j] -= phi[j] / i;
+				}
+			}
+		}
+		return phi;
 	}
 
 }
