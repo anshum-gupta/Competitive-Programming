@@ -132,5 +132,13 @@ public class NumberTheoryUtils {
 		}
 		return phi;
 	}
-
+	public long addModulo(long a, long b) {
+		return (a + b) % MOD;
+	}
+	public long multiplyModulo(long a, long b) {
+		return (a * b) % MOD;
+	}
+	public long subtractModulo(long a, long b) {
+		return (a - b + MOD) % MOD;
+	}
 }
