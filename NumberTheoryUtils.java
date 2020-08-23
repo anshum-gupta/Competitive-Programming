@@ -141,4 +141,7 @@ public class NumberTheoryUtils {
 	public long subtractModulo(long a, long b) {
 		return (a - b + MOD) % MOD;
 	}
+	public long divideModulo(long a, long b) {
+		return a * this.inverseModulo(b);
+	}
 }
