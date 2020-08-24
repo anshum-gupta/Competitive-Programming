@@ -24,38 +24,24 @@ static final int INF = (int)1e9;
 static boolean[]vis;
 static ArrayList<ArrayList<Integer>> adj1, adj2;
 static int n, m, k, q, h, w;
-static char[]str;
+static char[]a, b;
 
 public static void solve() throws Exception {
 	   // solve the problem here
 		s = new MyScanner();
    		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-        int tc = 1;//s.nextInt();
-        NumberTheoryUtils ntu = new NumberTheoryUtils();
-        ntu.setMod(mod);
+        int tc = s.nextInt();
         while(tc-- > 0){
         	n = s.nextInt();
         	k = s.nextInt();
-        	long[]gcds = new long[k+1];
-        	long sum = 0;
-        	for(int i=k; i>=1; i--) {
-        		gcds[i] = ntu.powerModulo(k / i , n);
-        		for(int j=2*i; j<=k; j+=i) {
-        			gcds[i] -= gcds[j];
-        			gcds[i] %= mod;
-        			if(gcds[i] < 0)gcds[i] += mod;
-        		}
-        		sum += gcds[i];
-        		sum %= mod;
-        		if(sum < 0) sum += mod;
-        	}
-        	out.println(sum);
+        	
         } 
            
         out.flush();
         out.close();
 }
+
 
 public static PrintWriter out;
 public static MyScanner s;
