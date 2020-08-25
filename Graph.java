@@ -106,7 +106,7 @@ class Graph {
 	}
 	private boolean containsCycleUtilDirectedGraph(int i, boolean[] recursionStack) {
 		if(recursionStack[i])return true;
-		if(vis[i])return true;
+		if(vis[i])return false;
 		vis[i] = recursionStack[i] = true;
 		for(Integer x : adj.get(i)) {
 			if(containsCycleUtilDirectedGraph(x, recursionStack))return true;
