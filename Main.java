@@ -1,8 +1,22 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.StringTokenizer;
+import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Main {
-
 public static void main(String[] args){
 
    new Thread(null, null, "Anshum Gupta", 99999999) {
@@ -21,28 +35,97 @@ static final int mxN = (int)(1e6);
 static final int mxV = (int)(1e6), log = 18;
 static long mod = (long)(1e9+7); //998244353;//̇
 static final int INF = (int)1e9;
-static boolean[]vis;
-static ArrayList<ArrayList<Integer>> adj1, adj2;
-static int n, m, k, q, h, w;
-static char[]a, b;
-
+static boolean[]vis, recst;
+static ArrayList<HashSet<Integer>> adj;
+static int n, m, k, q, x;
+static char[]str;
+static char[][] arr;
+static int[]a, indeg;
+static ArrayList<Integer> top;
 public static void solve() throws Exception {
 	   // solve the problem here
 		s = new MyScanner();
    		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
         int tc = s.nextInt();
-        while(tc-- > 0){
-        	n = s.nextInt();
-        	k = s.nextInt();
-        	
-        } 
+        for(int i=1; i<=tc; i++) {
+        	out.print("Case #" + i + ": ");
+        	testcase();
+        }
            
         out.flush();
         out.close();
 }
-
-
+static void dfs(int u) {
+	vis[u] = true;
+	for(Integer x : adj.get(u)) {
+		if(!vis[x]) {
+			dfs(x);
+		}
+	}
+	top.add(u);
+}
+static void testcase() {
+	n = s.nextInt();
+	m = s.nextInt();
+	arr = new char[n][];
+	for(int i=0; i<n; i++) {
+		arr[i] = s.next().toCharArray();
+	}
+	adj = new ArrayList<HashSet<Integer>>();
+	indeg = new int[26];
+	for(int i=0; i<26; i++)adj.add(new HashSet<Integer>());
+	for(int i=0; i<n-1; i++) {
+		for(int j=0; j<m; j++) {
+			int before = arr[i+1][j] - 'A';
+			int after = arr[i][j] - 'A';
+			if(before != after){
+				adj.get(before).add(after);
+				indeg[after]++;
+			}
+		}
+	}
+	vis = new boolean[26];
+	recst = new boolean[26];
+	boolean ok = true;
+//	DebugUtills.printAdjacencyListForUnweightedGraphHashSetVersion(adj);
+	for(int i=0; i<26; i++) {
+		if(!vis[i]) {
+			if(hasCycle(i)) {
+				ok = false;
+				break;
+			}
+		}
+	}
+	if(!ok) {
+		out.print("-1\n");
+		return;
+	}
+	Arrays.fill(vis, false);
+	top = new ArrayList<Integer>();
+	for(int i=0; i<26; i++) {
+		if(indeg[i] == 0 && adj.get(i).size() > 0) {
+			dfs(i);
+		}
+	}
+	Collections.reverse(top);
+	for(Integer x : top) {
+		out.print((char)(x + 'A'));
+	}out.print("\n");
+}
+private static boolean hasCycle(int u) {
+	if(recst[u])return true;
+	if(vis[u])return false;
+	vis[u] = true;
+	recst[u] = true;
+	for(Integer x : adj.get(u)) {
+		if(!vis[x]) {
+			if(hasCycle(x))return true;
+		}
+	}
+	recst[u] = false;
+	return false;
+}
 public static PrintWriter out;
 public static MyScanner s;
 static class MyScanner {

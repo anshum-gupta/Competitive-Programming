@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 public class DebugUtills {
 	static PrintWriter out = new PrintWriter(new BufferedOutputStream(System.out), true);
 	public static void printIntArray(int[]a) {
@@ -39,6 +40,14 @@ public class DebugUtills {
 		}
 	}
 	public static void printAdjacencyListForUnweightedGraph(ArrayList<ArrayList<Integer>> adj) {
+		for(int i=0; i<adj.size(); i++) {
+			out.print("Edge from " + i + " to --> ");
+			for(Integer x : adj.get(i)) {
+				out.print(x + " ");
+			}out.println();
+		}
+	}
+	public static void printAdjacencyListForUnweightedGraphHashSetVersion(ArrayList<HashSet<Integer>> adj) {
 		for(int i=0; i<adj.size(); i++) {
 			out.print("Edge from " + i + " to --> ");
 			for(Integer x : adj.get(i)) {

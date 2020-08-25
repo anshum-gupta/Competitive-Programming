@@ -1,7 +1,8 @@
-import java.io.*;
-import java.util.*;
-import java.math.*;
-import java.util.regex.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
+
 
 class Graph {
 	ArrayList<ArrayList<Integer>> adj;
@@ -65,7 +66,11 @@ class Graph {
 	}
 	public ArrayList<Integer>topologicalSort(int u) {
 			ArrayList<Integer> topologicalSort = new ArrayList<Integer>();
-			dfsForTopologicalSort(1, topologicalSort);
+			for(int i=1; i<=n; i++) {
+				if(!vis[i]) {
+					dfsForTopologicalSort(i, topologicalSort);
+				}
+			}
 			return topologicalSort;
 	}
 	public void bfsWithDistanceStore(int u, int[]distance) {
@@ -89,5 +94,23 @@ class Graph {
 		this.bfsWithDistanceStore(u, res);
 		return res;
 	}
-	
+	public boolean containsCycleDirectedGraph() {
+		boolean[]recursionStack = new boolean[n+1];
+		Arrays.fill(vis, false);
+		for(int i=1; i<=n; i++) {
+			if(containsCycleUtilDirectedGraph(i, recursionStack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	private boolean containsCycleUtilDirectedGraph(int i, boolean[] recursionStack) {
+		if(recursionStack[i])return true;
+		if(vis[i])return true;
+		vis[i] = recursionStack[i] = true;
+		for(Integer x : adj.get(i)) {
+			if(containsCycleUtilDirectedGraph(x, recursionStack))return true;
+		}
+		return false;
+	}
 }
