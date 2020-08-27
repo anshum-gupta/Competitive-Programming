@@ -84,7 +84,6 @@ static void testcase() {
 	vis = new boolean[26];
 	recst = new boolean[26];
 	boolean ok = true;
-//	DebugUtills.printAdjacencyListForUnweightedGraphHashSetVersion(adj);
 	for(int i=0; i<26; i++) {
 		if(isPart[i]) {
 			if(hasCycle(i)) {
@@ -100,7 +99,7 @@ static void testcase() {
 	Arrays.fill(vis, false);
 	top = new ArrayList<Integer>();
 	for(int i=0; i<26; i++) {
-		if(isPart[i] && !vis[i]) {
+		if(!vis[i] && isPart[i]) {
 			dfs(i);
 		}
 	}

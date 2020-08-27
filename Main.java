@@ -47,85 +47,19 @@ public static void solve() throws Exception {
 		s = new MyScanner();
    		out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-        int tc = s.nextInt();
+        int tc = 1;//s.nextInt();
         for(int i=1; i<=tc; i++) {
-        	out.print("Case #" + i + ": ");
+//        	out.print("Case #" + i + ": ");
         	testcase();
+        	
         }
            
         out.flush();
         out.close();
 }
-static void dfs(int u) {
-	vis[u] = true;
-	for(Integer x : adj.get(u)) {
-		if(!vis[x]) {
-			dfs(x);
-		}
-	}
-	top.add(u);
-}
-static void testcase() {
-	n = s.nextInt();
-	m = s.nextInt();
-	arr = new char[n][];
-	for(int i=0; i<n; i++) {
-		arr[i] = s.next().toCharArray();
-	}
-	adj = new ArrayList<HashSet<Integer>>();
-	indeg = new int[26];
-	for(int i=0; i<26; i++)adj.add(new HashSet<Integer>());
-	for(int i=0; i<n-1; i++) {
-		for(int j=0; j<m; j++) {
-			int before = arr[i+1][j] - 'A';
-			int after = arr[i][j] - 'A';
-			if(before != after){
-				adj.get(before).add(after);
-				indeg[after]++;
-			}
-		}
-	}
-	vis = new boolean[26];
-	recst = new boolean[26];
-	boolean ok = true;
-//	DebugUtills.printAdjacencyListForUnweightedGraphHashSetVersion(adj);
-	for(int i=0; i<26; i++) {
-		if(!vis[i]) {
-			if(hasCycle(i)) {
-				ok = false;
-				break;
-			}
-		}
-	}
-	if(!ok) {
-		out.print("-1\n");
-		return;
-	}
-	Arrays.fill(vis, false);
-	top = new ArrayList<Integer>();
-	for(int i=0; i<26; i++) {
-		if(indeg[i] == 0 && adj.get(i).size() > 0) {
-			dfs(i);
-		}
-	}
-	Collections.reverse(top);
-	for(Integer x : top) {
-		out.print((char)(x + 'A'));
-	}out.print("\n");
-}
-private static boolean hasCycle(int u) {
-	if(recst[u])return true;
-	if(vis[u])return false;
-	vis[u] = true;
-	recst[u] = true;
-	for(Integer x : adj.get(u)) {
-		if(!vis[x]) {
-			if(hasCycle(x))return true;
-		}
-	}
-	recst[u] = false;
-	return false;
-}
+
+static void testcase() {}
+
 public static PrintWriter out;
 public static MyScanner s;
 static class MyScanner {
