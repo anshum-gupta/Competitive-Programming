@@ -15,10 +15,25 @@ public class MinimumSpanningTree extends Graph{
 			this.distance = distance;
 		}
 	}
+	static class Edge implements Comparable<Edge>{
+		int source, destination;
+		long weight;
+		public Edge() {}
+		public Edge(int source, int destination, long weight) {
+			this.source = source;
+			this.destination = destination;
+			this.weight = weight;
+		}
+		@Override
+		public int compareTo(Edge o) {
+			return Long.compare(weight, o.weight);
+		}
+	}
+	
 	public MinimumSpanningTree(int n) {
 		super(n);
 	}
-	public long PrimsDistance(ArrayList<ArrayList<Pair>> adj, int start) {
+	public long PrimsTotalWeight(ArrayList<ArrayList<Pair>> adj, int start) {
 		ArrayList<ArrayList<Pair>> mst = new ArrayList<>();
 		long[]distance = new long[super.n+1];
 		int[]parent = new int[super.n+1];
@@ -119,6 +134,42 @@ public class MinimumSpanningTree extends Graph{
 		return mst;
 	
 	}
-	
+
+	public Edge[] Kruskals(Edge[]edges, int start) {
+		Edge[] result = new Edge[n];
+		Arrays.parallelSort(edges);
+		DisjointSetLearning ds = new DisjointSetLearning(n);
+		ds.init();
+		int currentEdgeCount = 0, index = 0;
+		while(currentEdgeCount < n - 1) {
+			Edge currentEdge = edges[index++];
+			int representativeOfEdgeSource = ds.findWithCaching(currentEdge.source);
+			int representativeOfEdgeDestination = ds.findWithCaching(currentEdge.destination);
+			if(representativeOfEdgeSource != representativeOfEdgeDestination) {
+				result[currentEdgeCount++] = currentEdge;
+				ds.unionByRank(representativeOfEdgeSource, representativeOfEdgeDestination);
+			}
+		}
+		return result;
+	}
+	public long KruskalsTotalWeight(Edge[]edges, int start) {
+		Edge[] result = new Edge[n];
+		long totalDistance = 0;
+		Arrays.parallelSort(edges);
+		DisjointSetLearning ds = new DisjointSetLearning(n);
+		ds.init();
+		int currentEdgeCount = 0, index = 0;
+		while(currentEdgeCount < n - 1) {
+			Edge currentEdge = edges[index++];
+			int representativeOfEdgeSource = ds.findWithCaching(currentEdge.source);
+			int representativeOfEdgeDestination = ds.findWithCaching(currentEdge.destination);
+			if(representativeOfEdgeSource != representativeOfEdgeDestination) {
+				result[currentEdgeCount++] = currentEdge;
+				totalDistance += currentEdge.weight;
+				ds.unionByRank(representativeOfEdgeSource, representativeOfEdgeDestination);
+			}
+		}
+		return totalDistance;
+	}
 }
 
