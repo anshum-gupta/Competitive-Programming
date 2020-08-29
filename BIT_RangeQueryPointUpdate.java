@@ -10,6 +10,11 @@ public class BIT_RangeQueryPointUpdate {
 		this.n = n;
 		this.bit = new int[n+10];
 	}
+	public BIT_RangeQueryPointUpdate(int n) {
+//		System.out.println("bit constructor called");
+		this.n = n;
+		this.bit = new int[n+10];
+	}
 	public void init_tree(int[]a) {
 //		System.out.println("init tree ");
 		Arrays.fill(this.bit, 0);

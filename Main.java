@@ -33,15 +33,14 @@ public static void main(String[] args){
 static final long mxx = (long)(1e18+5);
 static final int mxN = (int)(1e6);
 static final int mxV = (int)(1e6), log = 18;
-static long mod = (long)(1e9+7); //998244353;//̇
+static long mod = 998244353;//̇(long)(1e9+7); //
 static final int INF = (int)1e9;
 static boolean[]vis, recst;
 static ArrayList<HashSet<Integer>> adj;
-static int n, m, k, q, x;
+static int n, m, k, q, x , a, b, c, d;
 static char[]str;
 static char[][] arr;
-static int[]a, indeg;
-static ArrayList<Integer> top;
+static Long[][]dp;
 public static void solve() throws Exception {
 	   // solve the problem here
 		s = new MyScanner();
@@ -58,8 +57,38 @@ public static void solve() throws Exception {
         out.close();
 }
 
-static void testcase() {}
+static void testcase() {
+	char[]pattern = s.next().toCharArray();
+	char[]text = s.next().toCharArray();
+	char[]str = new char[pattern.length + text.length + 1];
+	for(int i=0; i<pattern.length; i++)str[i] = pattern[i];
+	str[pattern.length] = '#';
+	for(int i=pattern.length + 1; i < str.length; i++) {
+		str[i] = text[i-pattern.length-1];
+	}
+	int[]lps = getLps(str);
+	int cnt = 0;
+	for(int i=pattern.length; i<str.length; i++) {
+		if(lps[i] == pattern.length) {
+			cnt++;
+		}
+	}
+	out.println(cnt);
+}
 
+private static int[] getLps(char[] str) {
+	int[]lps = new int[str.length];
+	lps[0] = 0;
+	for(int i=1; i<str.length; i++) {
+		int j = lps[i-1];
+		while(j > 0 && str[j] != str[i]) {
+			j = lps[j-1];
+		}
+		if(str[j] == str[i])j++;
+		lps[i] = j;
+	}
+	return lps;
+}
 public static PrintWriter out;
 public static MyScanner s;
 static class MyScanner {
