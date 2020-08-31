@@ -51,15 +51,15 @@ public class MinimumSpanningTree extends Graph{
 		for(int i=1; i<=n; i++) {		
 			pq.add(new Pair(i, distance[i]));
 		}
-		vis[0] = true;
-		Arrays.fill(vis, false);
+		visited[0] = true;
+		Arrays.fill(visited, false);
 		
 		while(!pq.isEmpty()) {	
 			Pair cur = pq.poll();
 //			out.println("at vertex " + cur.vertex);
-			vis[cur.vertex] = true;
+			visited[cur.vertex] = true;
 			for(Pair p : adj.get(cur.vertex)) {
-				if(!vis[p.vertex]) {
+				if(!visited[p.vertex]) {
 //					out.println("trying vertex " + p.vertex);
 //					out.println(pq.size());
 					if(p.distance < distance[p.vertex]) {
@@ -104,15 +104,15 @@ public class MinimumSpanningTree extends Graph{
 		for(int i=1; i<=n; i++) {		
 			pq.add(new Pair(i, distance[i]));
 		}
-		vis[0] = true;
-		Arrays.fill(vis, false);
+		visited[0] = true;
+		Arrays.fill(visited, false);
 		
 		while(!pq.isEmpty()) {	
 			Pair cur = pq.poll();
 //			out.println("at vertex " + cur.vertex);
-			vis[cur.vertex] = true;
+			visited[cur.vertex] = true;
 			for(Pair p : adj.get(cur.vertex)) {
-				if(!vis[p.vertex]) {
+				if(!visited[p.vertex]) {
 //					out.println("trying vertex " + p.vertex);
 //					out.println(pq.size());
 					if(p.distance < distance[p.vertex]) {

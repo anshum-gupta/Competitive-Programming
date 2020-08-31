@@ -13,14 +13,14 @@ class LCA extends Graph{
 //		System.out.println("LCA constructor called!");
 		dep = new int[n+1];
 		par = new int[log][n+1];
-		vis = new boolean[n+1];
+		visited = new boolean[n+1];
 		for(int i=0; i<log; i++)Arrays.fill(par[i], -1);
 	}
 	public LCA() {
 		super();
 	}
 	public void preprocess(int u, int p){
-		vis[u] = true;
+		visited[u] = true;
 		if(p != -1) {
 			par[0][u] = p;
 		}
@@ -28,8 +28,8 @@ class LCA extends Graph{
 			if(par[i-1][u] == -1)break;
 			par[i][u] = par[i-1][par[i-1][u]];
 		}
-		for(Integer x : adj.get(u)) {
-			if(!vis[x]) {
+		for(Integer x : adjacencyList.get(u)) {
+			if(!visited[x]) {
 				dep[x] = dep[u] + 1;
 				preprocess(x, u);
 			}

@@ -47,9 +47,9 @@ public class WeightedGraph extends Graph{
 		pq.add(new Pair<Integer, Long>(u, distance[u]));
 		while(!pq.isEmpty()) {
 			Pair<Integer, Long> cur = pq.poll();
-			vis[cur.a] = true;
+			visited[cur.a] = true;
 			for(Pair<Integer, Long> x : adj.get(cur.a)) {
-				if(!vis[x.a]) {
+				if(!visited[x.a]) {
 					if(distance[x.a] > distance[cur.a] + x.b) {
 						distance[x.a] = distance[cur.a] + x.b;
 						pq.add(new Pair<Integer, Long>(x.a, distance[x.a]));
