@@ -17,6 +17,10 @@ public class NumberTheoryUtils {
 	public int lcm(int a, int b) {
 		return (int) 1L * a * b / gcd(a, b);
 	}
+	public void makeFacts(int maxLength) {
+		getFactorialsModulo(maxLength);
+		getInverseFactorialsModulo(maxLength);
+	}
 	public int[] getLPFArray(int maxLength) {
 		int[]lpf = new int[maxLength+5];
 		for(int i=2; i<=maxLength; i++) {
