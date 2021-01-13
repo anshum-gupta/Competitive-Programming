@@ -86,6 +86,7 @@ public class NumberTheoryUtils {
 		}
 		return inverseFact;
 	}
+	
 	public TreeMap<Integer, Integer> getPrimeFactors(long n){
 		TreeMap<Integer, Integer> answer = new TreeMap<Integer, Integer>();
 		int twoCount = 0;
@@ -146,6 +147,6 @@ public class NumberTheoryUtils {
 		return (a - b + MOD) % MOD;
 	}
 	public long divideModulo(long a, long b) {
-		return a * this.inverseModulo(b);
+		return this.multiplyModulo(a, this.inverseModulo(b));
 	}
 }
