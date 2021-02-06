@@ -62,9 +62,24 @@ public class NumberTheoryUtils {
 	public long inverseModulo(long value) {
 		return this.powerModulo(value, MOD - 2L);
 	}
+	
+	public long inverseModuloForNonPrime(long value) {
+		
+		long gcd = this.gcd(value, MOD);
+		if(gcd != 1) return -1;
+		
+		long eulerPhi = this.eulerTotientFunctionForSingleValue(MOD);
+		
+		long ans = this.powerModulo(value, eulerPhi - 1);
+		
+		return ans;
+		
+	}
+	
 	public long nCr(int n, int r) {
 		if(n < r || n < 0 || r < 0)return 0L;
-		return (((fact[n] * inverseFact[n-r]) % MOD) * inverseFact[r]) % MOD;
+		return (((fact[n]
+				* inverseFact[n-r]) % MOD) * inverseFact[r]) % MOD;
 	}
 	
 	public long[]getFactorialsModulo(int maxLength){
@@ -149,4 +164,5 @@ public class NumberTheoryUtils {
 	public long divideModulo(long a, long b) {
 		return this.multiplyModulo(a, this.inverseModulo(b));
 	}
+
 }

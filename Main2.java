@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -17,33 +16,16 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Stream;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 
-public class Main {
+public class Main2 {
 	
-static class Point {
-	
-	long x, y;
-	int index;
-
-	/**
-	 * @param x
-	 * @param y
-	 */
-	public Point(int x, int y, int index) {
-		this.x = x;
-		this.y = y;
-		this.index = index;
-	}
-	
-}
-
 
 
 public static void main(String[] args){
@@ -63,12 +45,12 @@ public static void main(String[] args){
 
 static final long INF_LONG = (long)(1e18 + 5), MOD = (long)1e9 + 7;//998244353; 
 static final int MXN = (int)(1001), MXV = (int)(2e5 + 5), log = 18, INF = (int)1e9 + 500;
+static boolean[] vis;
 static ArrayList<ArrayList<Integer>> adj;
-static boolean[][] vis;
-static char[] S;
-static int[] A, lpf;
-static int[] dp;
 static int N, M, K, Q, H, W;
+static char[] S;
+
+
 
 
 public static void solve() throws Exception {
@@ -76,9 +58,10 @@ public static void solve() throws Exception {
 		s = new MyScanner();
    		out = new MyWriter(new BufferedOutputStream(System.out));
    		
-        int T = 1;//s.nextInt();
-        
-        for(int i = 1; i <= T; i++) testcase();
+        int tc = s.nextInt();   
+    	for(int i=1; i<=tc; i++) {
+    		testcase();
+    	}
           
         out.flush();
         out.close();
@@ -86,60 +69,67 @@ public static void solve() throws Exception {
 
 
 
-
 static void testcase() {
 	
-	int N = s.nextInt();
-	Point[] points = new Point[N];
+	// for lcm to exist, gcd should be there
 	
-	for(int i = 0; i < N; i++) {
-		int x = s.nextInt(), y = s.nextInt();
-		points[i] = new Point(x, y, i);
-	}
-	
-	
-	int[] ans = new int[N];
-	
+	char[] S = s.next().toCharArray(), T = s.next().toCharArray();
+	int N = S.length, M =  T.length;
+	int gcd = -1;
+
 	for(int i = 0; i < N; i++) {
 		
-		ans[i] = i;
-		
-		for(int j = i; j > 1; j--) {
-			
-			Point p1 = points[ans[j]], p2 = points[ans[j - 1]], p3 = points[ans[j - 2]];
-			
-			if(isObtuse(p1, p2, p3)) {
-				
-				int temp = ans[j];
-				ans[j] = ans[j - 1];
-				ans[j - 1] = temp;
-				
-			}
-			
-			else break;
-			
+		if(divides(S, i + 1) && divides(T, i + 1) && equals(S, T, i + 1)) {
+			gcd = i + 1;
 		}
 		
 	}
 	
-	for(int i = 0; i < N; i++) {
-		out.print((ans[i] + 1) + " ");
+	if(gcd == -1) {
+		out.println("-1");
+		return;
 	}
 	
-	out.println();
+	int times = N * M / gcd / gcd;
 	
 	
+	StringBuilder ans = new StringBuilder("");
+	for(int i = 0; i < gcd; i++) ans.append(S[i]);
+	String temp = ans.toString();
 	
+	for(int i = 0; i < times - 1; i++) {
+		ans.append(temp);
+	}
+	
+	out.println(ans);
 	
 }
 
 
 
-
-
-private static boolean isObtuse(Point p1, Point p2, Point p3) {
+private static boolean divides(char[] arr, int len) {
 	
-	return (p1.x - p2.x) * (p2.x - p3.x) + (p1.y - p2.y) * (p2.y - p3.y) >= 0;
+	if(arr.length % len != 0) return false;
+	
+	for(int j = len; j < arr.length; j++) {
+		
+		if(arr[j] != arr[j - len]) return false;
+		
+	}
+	
+	return true;
+	
+}
+
+
+
+private static boolean equals(char[] A, char[] B, int len) {
+	
+	for(int i = 0; i < len; i++) {
+		if(A[i] != B[i]) return false;
+	}
+	
+	return true;
 	
 }
 
@@ -172,13 +162,6 @@ static void shuffleArray(long[] a) {
 static void shuffleSort(long[] a) {
 	shuffleArray(a);
 	Arrays.parallelSort(a);
-}
-
-static void reverse(int[] a) {
-	int[] copy = Arrays.copyOf(a, a.length);
-	for(int i = 0; i < a.length; i++) {
-		a[a.length - 1 - i] = copy[i];
-	}
 }
 
 static class MyScanner {
@@ -247,11 +230,10 @@ static class MyScanner {
     }
     ArrayList<ArrayList<Integer>> readUndirectedUnweightedGraph(int n, int m) {
     	ArrayList<ArrayList<Integer>>adj = new ArrayList<ArrayList<Integer>>();
-    	for(int i = 0; i < n; i++)adj.add(new ArrayList<Integer>());
-    	for(int i = 0; i < m; i++) {
+    	for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
+    	for(int i=0; i<m; i++) {
     		int u = s.nextInt();
     		int v = s.nextInt();
-    		u--; v--;
     		adj.get(u).add(v);
     		adj.get(v).add(u);
     	}
@@ -259,11 +241,10 @@ static class MyScanner {
     }
     ArrayList<ArrayList<Integer>> readDirectedUnweightedGraph(int n, int m) {
     	ArrayList<ArrayList<Integer>>adj = new ArrayList<ArrayList<Integer>>();
-    	for(int i = 0; i < n; i++)adj.add(new ArrayList<Integer>());
-    	for(int i = 0; i < m; i++) {
+    	for(int i=0; i<=n; i++)adj.add(new ArrayList<Integer>());
+    	for(int i=0; i<m; i++) {
     		int u = s.nextInt();
     		int v = s.nextInt();
-    		u--; v--;
     		adj.get(u).add(v);
     	}
     	return adj;
