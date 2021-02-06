@@ -15,6 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -48,16 +49,17 @@ static final int INF = (int)1e9;
 static boolean[]vis;
 static ArrayList<ArrayList<Integer>> adj;
 static int n, m, k, q;
+static char[] str;
 
 private static void solve() throws Exception {
 	// solve the problem here
 	s = new MyScanner();
 	out = new PrintWriter(new BufferedOutputStream(System.out), true);
 //	   		out = new PrintWriter("output.txt");
-	int tc = 1;//s.nextInt();
+	int tc = s.nextInt();
 	
 	for(int i=1; i<=tc; i++) {
-//        	out.print("Case #" + i + ": ");
+//        	out.append("Case #" + i + ": ");
 		testcase();
 	}
 	out.flush();
@@ -66,13 +68,25 @@ private static void solve() throws Exception {
 
 
 private static void testcase() {
-	int n = s.nextInt();
-	for(int i = 0; i < n; i++){
-		out.println("Trying vim hehehe...  i = " + i);
-	}	
+	int a = s.nextInt(), b = s.nextInt(), c = s.nextInt(), d = s.nextInt();
+	int cutoff = Math.max(a + b, c + d);
+	out.println(cutoff);
 }
 
 
+static void shuffleArray(int[] a) {
+	Random random = new Random();
+	for (int i = a.length-1; i > 0; i--) {
+		int index = random.nextInt(i + 1);
+		int tmp = a[index];
+		a[index] = a[i];
+		a[i] = tmp;
+	}
+}
+static void shuffleSort(int[] a) {
+	shuffleArray(a);
+	Arrays.parallelSort(a);
+}
 public static PrintWriter out;
 public static MyScanner s;
 static class MyScanner {
